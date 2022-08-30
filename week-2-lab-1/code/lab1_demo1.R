@@ -1,7 +1,7 @@
 ### Title:    Stats & Methods Lab 1 Demonstration Script 1
 ### Author:   Kyle M. Lang
 ### Created:  2018-09-10
-### Modified: 2022-09-03
+### Modified: 2020-09-03
 
 ## Clear the workspace:
 rm(list = ls(all = TRUE))

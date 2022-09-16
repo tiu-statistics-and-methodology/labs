@@ -1,7 +1,7 @@
 ### Title:    Stats & Methods Lab 5 Practice Script
 ### Author:   Kyle M. Lang, L.V.D.E. Vogelsmeier, Edo
 ### Created:  2018-09-24
-### Modified: 2022-03-07
+### Modified: 2022-09-16
 
 
 ###          ###
@@ -100,6 +100,8 @@
 ##      alpha = 0.05 level?
 ## 10c) What is the simple slope of Years of Education on 1975 Earnings
 ##      (controlling for 1974 Earnings) for Hispanic people?
+##      Note: To obtain the result with more decimals you can always use 
+##            the coef() function.
 ## 10d) Is the simple slope from (10c) statistically significant at the
 ##      alpha = 0.05 level?
 ## 10e) Visualize the simple slopes compute above in an appropriate way.

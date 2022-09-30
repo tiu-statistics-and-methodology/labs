@@ -1,7 +1,7 @@
 ### Title:    Stats & Methods Lab 5 Demonstration Script
 ### Author:   Kyle M. Lang
 ### Created:  2016-04-04
-### Modified: 2020-09-30
+### Modified: 2022-09-30
 
 rm(list = ls(all = TRUE))
 
@@ -88,7 +88,6 @@ testOut2 <- testSlopes(plotOut2)
 testOut2$hypotests
 
 testOut3 <- testSlopes(plotOut3)
-testOut3$hypotests
 
 ## Use the 'testSlopes' function to conduct a Johnson-Neyman analysis:
 ls(testOut1)

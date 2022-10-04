@@ -9,6 +9,10 @@
     # Load fundamental package
     library(rockchalk)
 
+    # Load data
+    dataDir <- "../week-6-lab-5/data/"
+    ginz <- readRDS(paste0(dataDir, "ginzberg.rds"))
+
     # Fit some linear model with interaction terms
     out <- lm(depression ~ fatalism * simplicity, data = ginz)
     summary(out)

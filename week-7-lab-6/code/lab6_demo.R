@@ -30,8 +30,8 @@ out1 <- lm(Price ~ Horsepower + MPG.city + Passengers, data = Cars93)
 summary(out1)
 
 # Save the residuals and fitted values from out1:
+yHat1 <- fitted(out1)
 res1  <- resid(out1)
-yHat1 <- predict(out1)
 
 # > Homoscedasticity ---------------------------------------------------------
 
@@ -40,7 +40,7 @@ yHat1 <- predict(out1)
   # Residuals vs. Predicted plot
   plot(y = res1, x = yHat1)
 
-  # Add an horizontal line as visual aid
+  # Add a horizontal line as a visual aid
   abline(h = 0, col = "gray")
 
 # Test: Breusch-Pagan Test.

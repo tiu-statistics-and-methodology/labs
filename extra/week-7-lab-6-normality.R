@@ -19,7 +19,8 @@ x <- rbeta(n, 5, 2)
 z <- rnorm(n)
 
 # Look at the plot
-hist(x, freq)
+hist(x, freq = FALSE)
+lines(density(x))
 
 # Skewness -------------------------------------------------------------------- 
 
@@ -46,8 +47,21 @@ c(
 
 # QQplots ---------------------------------------------------------------------
 
+# Refresh what quantiles are
+cbind(
+    theo_norm = qnorm(seq(0, 1, length.out = 10)),
+    observed = quantile(x, probs = seq(0, 1, length.out = 10))
+)
+
+# Create QQ plot manually
+plot(
+    y = quantile(x, probs = seq(0, 1, length.out = 1e3)),
+    x = qnorm(seq(0, 1, length.out = 1e3)),
+    xlim = c(-3, 3)
+)
+
 # Non normal variable
-qqnorm(x)
+qqnorm(x, xlim = c(-3, 3))
 qqline(x)
 
 # Normal variable

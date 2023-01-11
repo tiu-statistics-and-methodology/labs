@@ -1,109 +1,105 @@
-### Title:    Stats & Methods Lab 2 Demonstration Script
-### Author:   Kyle M. Lang
-### Created:  2017-09-08
-### Modified: 2020-09-09
+# Title:    Stats & Methods Lab 2 Demonstration Script
+# Author:   Kyle M. Lang
+# Created:  2017-09-08
+# Modified: 2023-01-11
 
-###--------------------------------------------------------------------------###
+# Set up -----------------------------------------------------------------------
 
-### Preliminaries ###
+# Make sure workspace is clean
+rm(list = ls(all = TRUE))
 
+# Install required packages
 install.packages("MLmetrics", repos = "http://cloud.r-project.org")
 
-rm(list = ls(all = TRUE)) # Clear workspace
-
+# Load required packages
 library(MLmetrics) # We'll need this for MSEs
 
-setwd("") # Let's all set our working directory to the correct place
+# Make sure the working directory is set to the location of this file
+setwd("")
 
-###--------------------------------------------------------------------------###
-
-### Data I/O ###
-
+# Define data location
 dataDir <- "../data/"
 
+# Load the mtcars dataset from the lab folder
 cars <- readRDS(paste0(dataDir, "mtcars.rds"))
 
-###--------------------------------------------------------------------------###
+# 1. Simple Linear Regression --------------------------------------------------
 
-### Simple Linear Regression ###
-
-## Fit a simple linear regression model:
+# Fit a simple linear regression model:
 out1 <- lm(qsec ~ hp, data = cars)
 
-## See what's inside the fitted lm object:
+# See what's inside the fitted lm object:
 ls(out1)
 
-## Summarize the results:
+# Summarize the results:
 summary(out1)
 
-## The 'summary' output is an object that we can save to a variable:
+# The 'summary' output is an object that we can save to a variable:
 s1 <- summary(out1)
 ls(s1)
 s1
 
-## Access the R^2 slot in the summary object:
+# Access the R^2 slot in the summary object:
 s1$r.squared
 
-## Extract coefficients:
+# Extract coefficients:
 coef(out1)
 
-## Extract residuals:
+# Extract residuals:
 res3 <- resid(out1)
 res3
 
-## Extract fitted values (two ways):
+# Extract fitted values (two ways):
 yHat1.1 <- fitted(out1)
 yHat1.2 <- predict(out1)
 
 yHat1.1
 yHat1.2
 
-## Compare:
+# Compare:
 yHat1.1 - yHat1.2
 
-###--------------------------------------------------------------------------###
+# > 1.1 Reproduce the inferential tests from Lab 1 -----------------------------
 
-## Reproduce the Tests from Lab 1 ###
-
-## t-test:
+# t-test
 t.test(mpg ~ am, data = cars, var.equal = TRUE)
+
+# t-test with linear regression
 summary(lm(mpg ~ am, data = cars))
 
-## Correlation:
+# correlation test:
 with(cars, cor.test(mpg, wt))
 
-## A naive approach:
+# correlation test w/ linear regression (naive)
 summary(lm(mpg ~ wt, data = cars))
 
-## We need to standardize the regression coefficients:
+# correlation test w/ linear regression (standardized coefs)
 summary(lm(scale(mpg) ~ scale(wt), data = cars))
 
-###--------------------------------------------------------------------------###
+# 2. Multiple Linear Regression ------------------------------------------------
 
-### Multiple Linear Regression ###
-
-## Fit a multiple linear regression model:
+# Fit a multiple linear regression model:
 out4 <- lm(qsec ~ hp + wt + carb, data = cars)
 
-## Summarize the model:
+# Summarize the model:
 s4 <- summary(out4)
 s4
 
-## Extract R^2:
+# Extract R^2:
 s4$r.squared
 
-## Extract F-stat:
+# Extract F-stat:
 s4$fstatistic
 
-## Extract coefficients:
+# Extract coefficients:
 coef(out4)
 
-## Compute confidence intervals for coefficients:
+# Compute confidence intervals for coefficients:
 confint(out4)
 confint(out4, parm = "hp")
 confint(out4, parm = c("(Intercept)", "wt"), level = 0.99)
 
-## Manually compute t-statistics:
+# Manually compute t-statistics:
 cf4 <- coef(out4)
 se4 <- sqrt(diag(vcov(out4)))
 t4  <- cf4 / se4
@@ -111,49 +107,48 @@ t4  <- cf4 / se4
 s4
 t4
 
-###--------------------------------------------------------------------------###
+# > 2.1 Model comparison -------------------------------------------------------
 
-### Model Comparison ###
-
-## Change in R^2:
+# Change in R^2:
 s4$r.squared - s1$r.squared
 
-## Significant increase in R^2?
+# Significant increase in R^2?
 anova(out1, out4)
 
-## Compare MSE values:
+# Compare MSE values:
 mse1 <- MSE(y_pred = predict(out1), y_true = cars$qsec)
 mse4 <- MSE(y_pred = predict(out4), y_true = cars$qsec)
 
 mse1
 mse4
 
-###--------------------------------------------------------------------------###
+# > 2.2 Model building in R ----------------------------------------------------
 
-### A More Elegant Way to Build Models ###
-
-## The long way:
+# Define a starting model
 out1 <- lm(qsec ~ hp, data = mtcars)
+
+# Update the model, the long way:
 out2 <- lm(qsec ~ hp + wt, data = mtcars)
 out3 <- lm(qsec ~ hp + wt + gear + carb, data = mtcars)
 
-## The short way:
+# Update the model, the short way:
 out2.1 <- update(out1, ". ~ . + wt")
 out3.1 <- update(out2.1, ". ~ . + gear + carb")
 out3.2 <- update(out1, ". ~ . + wt + gear + carb")
 
-## We can also remove variables:
+# We can also remove variables:
 out1.1 <- update(out2, ". ~ . - wt")
 
-summary(out2)
-summary(out2.1)
+# Compare models
+out2
+out2.1
 
 all.equal(out1, out1.1)
 all.equal(out2, out2.1)
 all.equal(out3, out3.1)
 all.equal(out3, out3.2)
 
-## We can rerun the same model on new data:
+# We can rerun the same model on new data:
 mtcars2 <- mtcars[1 : 15, ]
 
 out4 <- update(out3, data = mtcars2)
